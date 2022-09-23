@@ -1,61 +1,61 @@
-# Subroutines
+#Subroutines
 
-UMAT を用いた Abaqus のサブルーチンを開発するリポジトリ
+UMAT using Abaqus repository to develop subroutines for
 
 ## Folder tree
 
 <pre>
-├─Datas                 各種パラメータを格納するフォルダ
-├─Images                matplotlibで作成した画像や各種画像の保存用フォルダ
-├─src_fortran           fortran77ファイルを格納したフォルダ
-└─src_python            pythonファイルを格納したフォルダ
+├─Datas Folder for storing various parameters
+├─Images Folder for saving images created with matplotlib and various images
+├─src_fortran Folder containing fortran77 files
+└─src_python Folder containing python files
 </pre>
 
-### 上記以外のファイル
+### Files other than the above
 
-- [.devcontainer.json](.devcontainer.json)  
-  vscode 拡張機能である remote-container の設定用ファイル。コンテナの設定を記述。
-- [setup.cfg](setup.cfg)  
-  python 環境の設定を記述するファイル。現状 formatter と linter の設定だけ記述している。
+- [.devcontainer.json](.devcontainer.json)
+  Configuration file for remote-container, a vscode extension. Describes container settings.
+- [setup.cfg]
+  A file that describes the settings of the python environment. Currently, only formatter and linter settings are described.
 
-## Python 環境構築
+## Build Python environment
 
-1. Docker,docker-compose をインストール
-1. vscode の拡張機能`ms-vscode-remote.remote-containers`をインストール
-1. 画面左下の><を押し、`Remote-Containers: Open Folder in Container`を選択
+1. Install Docker, docker-compose
+1. Install vscode extension `ms-vscode-remote.remote-containers`
+1. Press >< at the bottom left of the screen and select `Remote-Containers: Open Folder in Container`
 
-初回はコンテナの生成に時間がかかる。右下に表示されるプログレスバーが終わったら環境構築完了
+It takes a long time to create the container for the first time. When the progress bar displayed at the bottom right ends, the environment construction is completed.
 
-## src_python フォルダ
+## src_python folder
 
-- [draw.py](src_python/draw.py)  
-  降伏局面を描く処理を記述している。matplotlib の contour というメソッドを利用。
+- [draw.py](src_python/draw.py)
+  It describes the process of drawing the surrender phase. Use matplotlib's contour method.
 - [identify_hill48_params.py](src_python/identify_hill48_params.py),
-  [identify_yld2004_params.py](src_python/identify_yld2004_params.py)  
-  各降伏関数で利用する異方性パラメータを計算し、また各方向の降伏応力、r 値を計算する処理を記述。各方向の計算は[Barlat 氏の yld2004-18p に関する論文](https://www.sciencedirect.com/science/article/abs/pii/S0749641904001160)の appendix を参考にしている。
-- その他のファイル  
-  一応残しているだけで大した意味はないです。
+  [identify_yld2004_params.py](src_python/identify_yld2004_params.py)
+  Describe the process to calculate the anisotropic parameters used in each yield function, and to calculate the yield stress and r value in each direction. The calculation of each direction is based on the appendix of [Barlat's paper on his yld2004-18p] (https://www.sciencedirect.com/science/article/abs/pii/S0749641904001160).
+- Other files
+  It doesn't make much sense to just leave it alone.
 
-## src_fortran フォルダ
+## src_fortran folder
 
-- [BaseSubroutine.for](src_fortran/BaseSubroutine.for)  
-  subroutine を作成する上で base となる subroutine
-- [HardeningRules.for](src_fortran/HardeningRules.for)  
-  硬化則についてその微分も併せて記述したファイル。subroutine を作成する際適宜コピーしてください。
-- [Lib.for](src_fortran/Lib.for)  
-  数値計算を行う上で便利な関数を用意したもの
-- [test.for](src_fortran/test.for)  
-  fortran77 の挙動を確認するために用意したもの。これをコンパイルするための Makefile も用意している。使い方は
-  1. gfortran をインストール
-  1. test.for を適当に記述
-  1. `make`コマンドを打つ
-  1. エラーが発生しなければ Debug フォルダ下に実行用ファイルが作成される
-- [TestSubroutine.for](src_fortran/TestSubroutine.for)  
-  Abaqus で subroutine が動かせるか確かめるために用意したもの。使う必要ないです。
-- [YieldFunctions.for](src_fortran/YieldFunctions.for)  
-  降伏関数とその一次微分、二次微分を記述したもの。subroutine を作成する際適宜コピーしてください。
-- [Yld2004Yld2004Swift.for](src_fortran/Yld2004Yld2004Swift.for)  
-  Yld2004-18P を非関連流れ則に基づいて実装した subroutine
+- [BaseSubroutine.for](src_fortran/BaseSubroutine.for)
+  base subroutine for creating subroutines
+- [HardeningRules.for](src_fortran/HardeningRules.for)
+  A file describing the hardening law together with its derivative. Please copy accordingly when creating a subroutine.
+- [Lib.for](src_fortran/Lib.for)
+  A function that is convenient for performing numerical calculations
+- [test.for](src_fortran/test.for)
+  Prepared to check the behavior of fortran77. There is also a Makefile for compiling this. how to use
+  1. Install gfortran
+  1. Write test.for appropriately
+  1. Hit `make` command
+  1. If no error occurs, an executable file will be created under the Debug folder
+- [TestSubroutine.for](src_fortran/TestSubroutine.for)
+  Prepared to check if subroutine can work with Abaqus. you don't need to use it.
+- [YieldFunctions.for](src_fortran/YieldFunctions.for)
+  A description of the yield function and its first and second derivatives. Please copy accordingly when creating a subroutine.
+- [Yld2004Yld2004Swift.for](src_fortran/Yld2004Yld2004Swift.for)
+  A subroutine that implements Yld2004-18P based on the unrelated flow rule
 
 ## ABAQUS documentation
 
